@@ -3,7 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <title>Homepage</title>
+    <title>Peminjaman</title>
 </head>
 
 <body>
@@ -28,7 +28,7 @@
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <h5>
-                                <a class="nav-link active" aria-current="page" href="{{ route('admin.home') }}">Home</a>
+                                <a class="nav-link"" aria-current="page" href="{{ route('admin.home') }}">Home</a>
                             </h5>
                         </li>
                         <li class="nav-item" style="margin-left: 30px">
@@ -38,7 +38,7 @@
                         </li>
                         <li class="nav-item" style="margin-left: 30px">
                             <h5>
-                                <a class="nav-link" aria-current="page"
+                                <a class="nav-link active" aria-current="page"
                                     href="{{ route('admin.peminjaman') }}">Peminjaman</a>
                             </h5>
                         </li>
@@ -66,10 +66,10 @@
         <div class="row mt-4">
             <div class="col"></div>
             <div class="col-6">
-                <form action="{{ route('admin.home') }}" method="GET">
+                <form action="{{ route('admin.peminjaman') }}" method="GET">
                     @csrf
                     <div class="input-group">
-                        <input type="search" name="search" class="form-control rounded" placeholder="Cari nama admin"
+                        <input type="search" name="search" class="form-control rounded" placeholder="Cari id peminjam"
                             aria-label="Search" aria-describedby="search-addon" />
                         <button type="submit" class="btn btn-outline-primary">search</button>
                     </div>
@@ -78,35 +78,49 @@
             <div class="col"></div>
         </div>
         <div class="row mt-5">
-            <div class="col"></div>
+            <div class="col"><a class="btn btn-info text-white" target="_blank"
+                    href="{{ route('admin.cetakDataPeminjaman') }}"
+                    style="text-decoration: none; margin-right: 30px">Cetak Data</a></div>
             <div class="col"></div>
             <div class="col-2">
-                <a class="btn btn-success" href="{{ route('admin.tambah') }}"
-                    style="text-decoration: none; margin-left: 30px">Tambah Data +</a>
+                <a class="btn btn-success" href="{{ route('admin.tambahPeminjaman') }}"
+                    style="text-decoration: none; margin-left: 30px">Tambah Data
+                    +</a>
             </div>
         </div>
         <table class="table" style="margin-top: 10px">
             <thead>
                 <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Nama</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Gender</th>
-                    <th scope="col">Jabatan</th>
+                    <th scope="col">Nomor Anggota</th>
+                    <th scope="col">Kode Buku</th>
+                    <th scope="col">Tanggal Peminjaman</th>
+                    <th scope="col">Tanggal Pengembalian</th>
+                    <th scope="col">Status Peminjaman</th>
                     <th scope="col">Aksi</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
-                @foreach ($data as $index => $userAdmin)
+                @foreach ($data as $index => $peminjam)
                     <tr>
-                        <td>{{ $index + $data->firstItem() }}</td>
-                        <td scope="row">{{ $userAdmin->name }}</td>
-                        <td>{{ $userAdmin->email }}</td>
-                        <td>{{ $userAdmin->jenis_kelamin }}</td>
-                        <td>{{ $userAdmin->level }}</td>
+                        <td scope="row">{{ $index + $data->firstItem() }}</td>
+                        <td>{{ $peminjam->id_user }}</td>
+                        <td>{{ $peminjam->id_buku }}</td>
+                        <td>{{ $peminjam->tanggal_pinjam }}</td>
+                        <td>{{ $peminjam->tanggal_kembali }}</td>
                         <td>
-                            <a class="btn btn-outline-warning" href="/editAdmin/{{ $userAdmin->id }}">Edit</a>
-                            <a class="btn btn-outline-danger" href="/deleteAdmin/{{ $userAdmin->id }}">Delete</a>
+                            <span
+                                class="{{ $peminjam->status === 'Sudah Dikembalikan' ? 'fw-semibold text-success' : 'fw-semibold text-danger' }}">
+                                {{ $peminjam->status }}
+                            </span>
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-primary"
+                                href="/admin/detailPeminjaman/{{ $peminjam->id }}/{{ $peminjam->id_user }}/{{ $peminjam->id_buku }}">Detail</a>
+                            <a class="btn btn-outline-warning"
+                                href="/admin/editPeminjaman/{{ $peminjam->id }}">Edit</a>
+                            <a class="btn btn-outline-danger"
+                                href="/admin/deletePeminjaman/{{ $peminjam->id }}">Delete</a>
                         </td>
                     </tr>
                 @endforeach
