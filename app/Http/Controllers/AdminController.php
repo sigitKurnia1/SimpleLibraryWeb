@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\ChartPeminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use Illuminate\Support\Facades\File;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -201,14 +203,16 @@ class AdminController extends Controller
         }
     }
 
-    public function adminPeminjaman(Request $request) {
+    public function adminPeminjaman(Request $request, ChartPeminjaman $chartPeminjaman) {
+        $chart = $chartPeminjaman->build();
+
         $search = $request->input('search');
 
         $data = Peminjaman::where(function($query) use ($search) {
             $query->where('id_user', 'LIKE', '%' .$search. '%');
         })->paginate(5);
 
-        return view('admin.peminjaman', compact('data'));
+        return view('admin.peminjaman', compact('data', 'chart'));
     }
 
     public function tambahPeminjaman() {
@@ -298,11 +302,12 @@ class AdminController extends Controller
         }
 
         return view('admin.detailPeminjaman', compact('detailPeminjaman'));
-    }
-
+    } 
+    
     public function cetakDataPeminjaman() {
         $data = Peminjaman::all();
 
-        return view('admin.cetakPeminjaman', compact('data'));
+        $pdf = PDF::loadView('admin.cetakPeminjaman', ['data' => $data]);
+	    return $pdf->stream();
     }
 }

@@ -63,6 +63,12 @@
             @endif
         </div>
 
+        <div class="card">
+            <div class="card-body">
+                {!! $chart->container() !!}
+            </div>
+        </div>
+
         <div class="row mt-4">
             <div class="col"></div>
             <div class="col-6">
@@ -129,6 +135,8 @@
         {{ $data->links() }}
     </div><br><br><br>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ $chart->cdn() }}"></script>
+    {{ $chart->script() }}
 </body>
 
 </html>
