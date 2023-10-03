@@ -10,6 +10,7 @@ use App\Models\Buku;
 use App\Models\Peminjaman;
 use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -302,12 +303,16 @@ class AdminController extends Controller
         }
 
         return view('admin.detailPeminjaman', compact('detailPeminjaman'));
-    } 
+    }
     
     public function cetakDataPeminjaman() {
-        $data = Peminjaman::all();
+        $data = DB::table('peminjaman')
+                ->join('users', 'users.id', '=', 'peminjaman.id_user')
+                ->join('buku', 'buku.id', '=', 'peminjaman.id_buku')
+                ->select('peminjaman.*', 'users.name', 'buku.judul_buku')
+                ->get();
 
-        $pdf = PDF::loadView('admin.cetakPeminjaman', ['data' => $data]);
+        $pdf = PDF::loadView('admin.cetakPeminjaman', ['data' => $data])->setPaper('a4', 'landscape');
 	    return $pdf->stream();
     }
 }

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('judul_buku');
             $table->string('penulis');
             $table->string('penerbit');
+            $table->string('kategori');
             $table->longText('deskripsi');
             $table->date('tahun_terbit')->nullable();
             $table->timestamps();

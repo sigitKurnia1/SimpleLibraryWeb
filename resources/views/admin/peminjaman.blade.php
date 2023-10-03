@@ -63,9 +63,12 @@
             @endif
         </div>
 
+
         <div class="card">
             <div class="card-body">
-                {!! $chart->container() !!}
+                <div class="d-flex justify-content-center">
+                    {!! $chart->container() !!}
+                </div>
             </div>
         </div>
 

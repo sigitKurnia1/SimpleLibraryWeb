@@ -14,18 +14,17 @@ class ChartPeminjaman
         $this->chart = $chart;
     }
 
-    public function build(): \ArielMejiaDev\LarapexCharts\BarChart
+    public function build(): \ArielMejiaDev\LarapexCharts\DonutChart
     {
-        
+
         $jumlahPeminjaman = Peminjaman::count();
         $jumlahKembali = Peminjaman::where('status', 'Sudah Dikembalikan')->count();
         $jumlahBelumKembali = Peminjaman::where('status', 'Belum Dikembalikan')->count();
 
-        return $this->chart->barChart()
-            ->setTitle('Statistik Data Peminjaman')
-            ->setWidth(1000)
-            ->setHeight(200)
-            ->setDataset([$jumlahPeminjaman, $jumlahKembali, $jumlahBelumKembali])
-            ->setLabels(['Jumlah Peminjaman', 'Jumlah Sudah Dikembalikan','Jumlah Belum Dikembalikan']);
+        return $this->chart->donutChart()
+            ->setTitle('Statistik Peminjaman')
+            ->setWidth(500)
+            ->addData([$jumlahPeminjaman, $jumlahKembali, $jumlahBelumKembali])
+            ->setLabels(['Jumlah Peminjaman', 'Jumlah Sudah Kembali', 'Jumlah Belum Kembali']);
     }
 }
